@@ -30,7 +30,7 @@ export class CoverageService {
         `cd ${repoPath} && ${packageMangager} install && ${packageMangager} run coverage`,
       );
     } catch (error) {
-      this.logger.error('Failed to run coverage on repository', error);
+      this.logger.error(`Failed to run coverage on repository: ${error}`);
       return err(`Failed to run coverage on repository: ${error}`);
     }
 
@@ -44,7 +44,7 @@ export class CoverageService {
     try {
       await fs.access(coveragePath, constants.R_OK);
     } catch (e) {
-      this.logger.error('Failed to access coverage file', e);
+      this.logger.error(`Failed to access coverage file: ${e}`);
       return err(`Failed to access coverage file: ${e}`);
     }
     const coverageString = await fs.readFile(coveragePath, {

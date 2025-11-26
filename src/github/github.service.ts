@@ -178,7 +178,7 @@ export class GithubService {
         head: `enhance/tests-${uuid}`,
         base: 'main',
       };
-      this.logger.log('creating PR: ', pull);
+      this.logger.log(`creating PR: ${JSON.stringify(pull)}`);
 
       try {
         const { data: pullRequest } = await this.octokit.pulls.create(pull);

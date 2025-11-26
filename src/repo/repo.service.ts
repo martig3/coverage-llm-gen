@@ -59,7 +59,7 @@ export class RepoService {
     try {
       await execAsync(`cd ./repos && git clone ${createRepoDto.url}`);
     } catch (error) {
-      this.logger.error('Failed to clone repository', error);
+      this.logger.error(`Failed to clone repository: ${error}`);
       return err(`Failed to clone repository: ${error}`);
     }
 

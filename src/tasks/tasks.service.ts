@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { err, ok, Result } from 'neverthrow';
 import { RepoFile } from 'src/db/schema';
-import { DrizzleService } from 'src/drizzle/drizzle.service';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -16,7 +15,6 @@ import { FilesService } from 'src/files/files.service';
 export class TasksService {
   private readonly logger = new Logger(TasksService.name);
   constructor(
-    private readonly drizzleService: DrizzleService,
     private readonly repoService: RepoService,
     private readonly fileService: FilesService,
     private readonly genAiService: GenaiService,
@@ -32,11 +30,11 @@ export class TasksService {
     if (!file) {
       return;
     }
-    this.logger.log('starting improvements generation:', file.path);
+    this.logger.log(`starting improvements generation: ${file.path}`);
     await this.fileService.updateFile({ ...file, status: 'processing' });
     const result = await this.handleGenerateImprovements(file);
     if (result.isErr()) {
-      this.logger.error('Error generating improvements', result.error);
+      this.logger.error(`Error generating improvements: ${result.error}`);
       await this.fileService.updateFile({ ...file, status: 'error' });
       return;
     }
@@ -60,7 +58,7 @@ export class TasksService {
     const existingPath = path.join('./repos', repoName);
     const uuid = crypto.randomUUID();
     const newPath = path.join('./repos', `${repoName}-${uuid}`);
-    this.logger.log('copying from:', existingPath, 'to:', newPath);
+    this.logger.log(`copying from: ${existingPath} to: ${newPath}`);
     await fs.cp(existingPath, newPath, { recursive: true });
 
     const execAsync = promisify(exec);
@@ -82,7 +80,7 @@ export class TasksService {
       return err('no response returned');
     }
     const newTestFilePath = path.join(newPath, testFilePath);
-    this.logger.log('writing to:', newTestFilePath);
+    this.logger.log(`writing to: ${newTestFilePath}`);
     await fs.writeFile(newTestFilePath, response, 'utf8');
 
     const pushResult = await this.githubService.pushChanges(
