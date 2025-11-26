@@ -6,9 +6,13 @@ import { DrizzleService } from './drizzle/drizzle.service';
 import { RepoController } from './repo/repo.controller';
 import { CoverageService } from './coverage/coverage.service';
 import { FilesService } from './files/files.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksService } from './tasks/tasks.service';
+import { GenaiService } from './genai/genai.service';
+import { GithubService } from './github/github.service';
 
 @Module({
-  imports: [],
+  imports: [ScheduleModule.forRoot()],
   controllers: [AppController, RepoController],
   providers: [
     AppService,
@@ -16,6 +20,9 @@ import { FilesService } from './files/files.service';
     DrizzleService,
     CoverageService,
     FilesService,
+    TasksService,
+    GenaiService,
+    GithubService,
   ],
 })
 export class AppModule {}

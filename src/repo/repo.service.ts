@@ -16,7 +16,14 @@ export class RepoService {
     private readonly drizzleService: DrizzleService,
     private readonly coverageService: CoverageService,
   ) {}
+  getRepoNameFromUrl(url: string) {
+    const repoName = url.split('/').pop()?.replace('.git', '') ?? '';
 
+    if (!repoName) {
+      return err('Invalid repository URL');
+    }
+    return ok(repoName);
+  }
   async create(createRepoDto: CreateRepoDto): Promise<Result<Repo, string>> {
     const existingRepo = await this.drizzleService.db.query.repos.findFirst({
       where: eq(repos.url, createRepoDto.url),
@@ -36,17 +43,16 @@ export class RepoService {
       return err(`Failed to clone repository: ${error}`);
     }
 
-    const repoName =
-      createRepoDto.url.split('/').pop()?.replace('.git', '') ?? '';
+    const repoName = this.getRepoNameFromUrl(createRepoDto.url);
 
-    if (!repoName) {
-      return err('Invalid repository URL');
+    if (repoName.isErr()) {
+      return err(repoName.error);
     }
 
     const uuid = crypto.randomUUID();
 
     const coverageResult = await this.coverageService.processRepoCoverage(
-      repoName,
+      repoName.value,
       uuid,
     );
     if (coverageResult.isErr()) {

@@ -88,10 +88,9 @@ export class CoverageService {
           return err('Failed to insert some file paths');
         }
       });
-
-      return ok();
     } catch (error) {
       return err(`Transaction failed: ${error}`);
     }
+    return ok();
   }
 }

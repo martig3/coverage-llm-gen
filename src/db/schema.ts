@@ -8,13 +8,22 @@ export const repos = sqliteTable('repos', {
     .$type<UUID>(),
   url: text('url').notNull(),
 });
-
+export type FileStatus =
+  | 'default'
+  | 'processing'
+  | 'queued'
+  | 'processed'
+  | 'error';
 export const files = sqliteTable(
   'files',
   {
     path: text('path').notNull().primaryKey(),
     coverage: int('coverage').notNull(),
-    repoId: text('repo_id', { length: 36 }).notNull(),
+    status: text('status').notNull().default('default').$type<FileStatus>(),
+    prUrl: text('pr_url'),
+    repoId: text('repo_id', { length: 36 }).notNull().$type<UUID>(),
   },
   (table) => [index('repo_id').on(table.repoId)],
 );
+
+export type RepoFile = typeof files.$inferSelect;
