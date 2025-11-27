@@ -15,7 +15,7 @@ https://github.com/user-attachments/assets/bd834bdd-0a66-4f44-b79f-a3da12327972
 
 ## Setup
 
-- Run `npm install`
+- Run `cd backend && npm install`
 - Run `cd client && npm install`
 - Fill out `.env.example`
   - GEMINI_API_KEY can be generated via [https://aistudio.google.com/](https://aistudio.google.com/)
