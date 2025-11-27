@@ -2,6 +2,15 @@
 
 This project analyzes github repositories and suggests test coverage improvements via LLM (Gemini) generated PRs. Includes a NestJS api + React web client for tracking the status of generated improvements.
 
+## Setup
+
+- Run `npm install`
+- Run `cd client && npm install`
+- Fill out `.env.example`
+  - GEMINI_API_KEY can be generated via [https://aistudio.google.com/](https://aistudio.google.com/)
+  - GITHUB_TOKEN can be generated via [https://github.com/settings/tokens](https://github.com/settings/tokens) (repository scopes R/W required)
+- Run `npm run start:dev` && `cd client && npm run start:dev` OR if you have `mprocs` installed run `mprocs`
+
 ## Domain Glossary
 
 ### Bounded Contexts
