@@ -1,6 +1,14 @@
-# File Coverage PR Generator
+# coverage-llm-gen
 
 This project analyzes github repositories and suggests test coverage improvements via LLM (Gemini) generated PRs. Includes a NestJS api + React web client for tracking the status of generated improvements.
+## Demo
+
+
+
+
+https://github.com/user-attachments/assets/bd834bdd-0a66-4f44-b79f-a3da12327972
+
+
 
 ## Setup
 
