@@ -19,7 +19,6 @@ import type { Route } from './+types/files';
 import { API_BASE_URL } from '~/lib/base-url';
 import { Button } from '~/components/ui/button';
 import {
-  useSSE,
   useSSEEvent,
   TaskEventType,
   type TaskProgressEvent,
@@ -56,7 +55,6 @@ export default function Files({ loaderData }: Route.ComponentProps) {
         [data.filePath]: data,
       }));
 
-      // Handle specific event types
       switch (data.eventType) {
         case TaskEventType.SETUP_REPO:
           console.log(`Setting up repo for ${data.repoName}`);
@@ -69,7 +67,6 @@ export default function Files({ loaderData }: Route.ComponentProps) {
           break;
         case TaskEventType.COMPLETE:
           console.log(`Task completed for ${data.filePath}`);
-          // Remove from active files
           setActiveFiles((prev) => {
             const newSet = new Set(prev);
             newSet.delete(data.filePath);
@@ -81,13 +78,11 @@ export default function Files({ loaderData }: Route.ComponentProps) {
     }
   });
 
-  // Listen for task started events
   useSSEEvent('task-started', (data: TaskStartedEvent) => {
     console.log('Task started:', data);
     setActiveFiles((prev) => new Set([...prev, data.filePath]));
   });
 
-  // Listen for task error events
   useSSEEvent('task-error', (data: TaskErrorEvent) => {
     console.error('Task error:', data);
     setActiveFiles((prev) => {
@@ -96,7 +91,6 @@ export default function Files({ loaderData }: Route.ComponentProps) {
       return newSet;
     });
 
-    // Log error details
     if (data.metadata?.error) {
       console.error(`Error details: ${data.metadata.error}`);
     }
@@ -110,13 +104,13 @@ export default function Files({ loaderData }: Route.ComponentProps) {
         </Link>{' '}
         Files
       </CardTitle>
-      <CardDescription>{`Files with <=80% coverage`}</CardDescription>
+      <CardDescription>{`Files with subpar coverage`}</CardDescription>
       {files.map((f) => (
         <Item
           variant="outline"
           size="sm"
           key={f.path}
-          className="min-w-[400px]"
+          className="min-w-lg my-4"
         >
           <ItemContent>
             <ItemTitle>{f.path}</ItemTitle>

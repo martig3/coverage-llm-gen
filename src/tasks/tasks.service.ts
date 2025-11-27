@@ -11,11 +11,13 @@ import { RepoService } from 'src/repo/repo.service';
 import { GenaiService } from 'src/genai/genai.service';
 import { FilesService } from 'src/files/files.service';
 import { TaskProgressEvent, TaskEventType } from 'src/events/events.interface';
+import { GithubService } from 'src/github/github.service';
 
 @Injectable()
 export class TasksService {
   private readonly logger = new Logger(TasksService.name);
   constructor(
+    private readonly githubService: GithubService,
     private readonly repoService: RepoService,
     private readonly fileService: FilesService,
     private readonly genAiService: GenaiService,
@@ -126,42 +128,42 @@ export class TasksService {
       `Creating pull request for ${filePath}`,
     );
 
-    // const pushResult = await this.githubService.pushChanges(
-    //   newPath,
-    //   `enhance/tests-${uuid}`,
-    //   testFilePath,
-    //   `Enhanced test coverage for ${filePath}`,
-    // );
+    const pushResult = await this.githubService.pushChanges(
+      newPath,
+      `enhance/tests-${uuid}`,
+      testFilePath,
+      `Enhanced test coverage for ${filePath}`,
+    );
 
-    // if (pushResult.isErr()) {
-    //   this.emitError(
-    //     taskId,
-    //     file,
-    //     repoName,
-    //     `Failed to push changes: ${pushResult.error}`,
-    //   );
-    //   return err(`Failed to push changes: ${pushResult.error}`);
-    // }
+    if (pushResult.isErr()) {
+      this.emitError(
+        taskId,
+        file,
+        repoName,
+        `Failed to push changes: ${pushResult.error}`,
+      );
+      return err(`Failed to push changes: ${pushResult.error}`);
+    }
 
-    // const submitResult = await this.githubService.submitPR(
-    //   newPath,
-    //   filePath,
-    //   uuid,
-    // );
-    // if (submitResult.isErr()) {
-    //   this.emitError(
-    //     taskId,
-    //     file,
-    //     repoName,
-    //     `PR submission failed: ${submitResult.error}`,
-    //   );
-    //   return err(`PR submission failed: ${submitResult.error}`);
-    // }
+    const submitResult = await this.githubService.submitPR(
+      newPath,
+      filePath,
+      uuid,
+    );
+    if (submitResult.isErr()) {
+      this.emitError(
+        taskId,
+        file,
+        repoName,
+        `PR submission failed: ${submitResult.error}`,
+      );
+      return err(`PR submission failed: ${submitResult.error}`);
+    }
 
     const updateResult = await this.fileService.updateFile({
       ...file,
       status: 'processed',
-      prUrl: 'https://google.com',
+      prUrl: submitResult.value,
     });
     if (updateResult.isErr()) {
       this.emitError(

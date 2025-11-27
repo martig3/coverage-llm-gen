@@ -23,6 +23,10 @@ export class GithubService {
     });
   }
 
+  // this in a different env would probably not be necessary and could be
+  // accomplished via just running `git push`, however I felt that since
+  // we already have a github token we can remove a lot of potential complexity
+  // with git/ssh setup and just push to remote this way instead
   async pushChanges(
     repoPath: string,
     branchName: string,
@@ -54,7 +58,6 @@ export class GithubService {
         return err(`Failed to get main branch reference: ${error}`);
       }
 
-      // Get the commit tree
       let baseTreeSha: string;
       try {
         const { data: mainCommit } = await this.octokit.git.getCommit({
@@ -74,7 +77,6 @@ export class GithubService {
         'utf8',
       );
 
-      // Create a new tree with the modified file
       let newTreeSha: string;
       try {
         const { data: newTree } = await this.octokit.git.createTree({
@@ -96,7 +98,6 @@ export class GithubService {
         return err(`Failed to create tree: ${error}`);
       }
 
-      // Create a new commit
       let newCommitSha: string;
       try {
         const { data: newCommit } = await this.octokit.git.createCommit({
@@ -112,9 +113,7 @@ export class GithubService {
         return err(`Failed to create commit: ${error}`);
       }
 
-      // Create or update the branch reference
       try {
-        // Try to create the branch
         await this.octokit.git.createRef({
           owner: remote.owner,
           repo: remote.repo,
@@ -123,7 +122,6 @@ export class GithubService {
         });
         this.logger.log(`Branch ${branchName} created and pushed`);
       } catch (error: unknown) {
-        // If branch already exists, update it
         const errorStatus = (error as { status?: number })?.status;
         if (errorStatus === 422) {
           try {

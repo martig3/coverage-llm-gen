@@ -45,7 +45,7 @@ export default function Repos({ loaderData }: Route.ComponentProps) {
     await revalidator.revalidate();
   };
   return (
-    <Card className="p-8">
+    <Card className="p-8 min-w-lg">
       <CardTitle>Repositories</CardTitle>
       <div className="flex flex-row gap-2">
         <Input

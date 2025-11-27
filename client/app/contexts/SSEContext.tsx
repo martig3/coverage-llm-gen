@@ -7,6 +7,7 @@ import React, {
   useCallback,
   type ReactNode,
 } from 'react';
+import { API_BASE_URL } from '~/lib/base-url';
 
 // Event types based on the backend controller
 export type SSEEventType =
@@ -87,7 +88,7 @@ interface SSEProviderProps {
 
 export const SSEProvider: React.FC<SSEProviderProps> = ({
   children,
-  sseUrl = 'http://localhost:3000/events/sse',
+  sseUrl = `${API_BASE_URL}/events/sse`,
 }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [lastEvent, setLastEvent] = useState<SSEEvent | null>(null);
@@ -263,7 +264,8 @@ export const useSSEEvent = (
   }, [eventType, addEventListener, ...dependencies]);
 };
 
-// Type guards for specific event types
+// disclaimer:
+// these type guards are horrific, I would just use a zod schema to validate in the real world
 export const isTaskProgressEvent = (data: any): data is TaskProgressEvent => {
   return (
     data &&
