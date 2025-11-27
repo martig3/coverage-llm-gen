@@ -9,6 +9,9 @@ This project analyzes github repositories and suggests test coverage improvement
 https://github.com/user-attachments/assets/bd834bdd-0a66-4f44-b79f-a3da12327972
 
 
+## Example PR
+
+[https://github.com/martig3/bukkit/pull/10](https://github.com/martig3/bukkit/pull/10)
 
 ## Setup
 
