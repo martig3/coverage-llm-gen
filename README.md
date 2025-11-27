@@ -18,6 +18,9 @@ https://github.com/user-attachments/assets/bd834bdd-0a66-4f44-b79f-a3da12327972
   - GEMINI_API_KEY can be generated via [https://aistudio.google.com/](https://aistudio.google.com/)
   - GITHUB_TOKEN can be generated via [https://github.com/settings/tokens](https://github.com/settings/tokens) (repository scopes R/W required)
 - Run `npm run start:dev` && `cd client && npm run start:dev` OR if you have `mprocs` installed run `mprocs`
+## Diagram
+<img width="2926" height="2182" alt="Untitled-2023-11-17-2008(1)" src="https://github.com/user-attachments/assets/36c46e67-9a2b-4ae3-b168-cf8c7f5a7644" />
+
 
 ## Domain Glossary
 
