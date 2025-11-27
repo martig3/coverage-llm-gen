@@ -137,7 +137,7 @@ export default function Files({ loaderData }: Route.ComponentProps) {
             {!f.prUrl ? (
               <Button
                 variant="outline"
-                onClick={() => generate(f)}
+                onClick={() => void generate(f)}
                 disabled={
                   (activeFiles.has(f.path) &&
                     taskProgress[f.path] !== undefined) ||

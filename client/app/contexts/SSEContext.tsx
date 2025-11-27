@@ -96,7 +96,7 @@ export const SSEProvider: React.FC<SSEProviderProps> = ({
 
   const eventSourceRef = useRef<EventSource | null>(null);
   const listenersRef = useRef<Map<SSEEventType, Set<EventListener>>>(new Map());
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout>(undefined);
   const reconnectAttemptsRef = useRef(0);
 
   const notifyListeners = useCallback((event: SSEEvent) => {

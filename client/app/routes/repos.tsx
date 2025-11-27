@@ -54,7 +54,7 @@ export default function Repos({ loaderData }: Route.ComponentProps) {
           value={repoUrl}
           onChange={(e) => setRepoUrl(e.target.value)}
         />
-        <Button disabled={addingRepo} onClick={() => addRepo(repoUrl)}>
+        <Button disabled={addingRepo} onClick={() => void addRepo(repoUrl)}>
           {addingRepo ? <Loader2 className="animate-spin" /> : <PlusIcon />}
         </Button>
       </div>
