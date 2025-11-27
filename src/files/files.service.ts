@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { and, eq } from 'drizzle-orm';
 import { err, ok, Result } from 'neverthrow';
@@ -12,7 +12,10 @@ import { DrizzleService } from 'src/drizzle/drizzle.service';
 
 @Injectable()
 export class FilesService {
+  private readonly logger = new Logger(FilesService.name);
+
   constructor(private readonly drizzleService: DrizzleService) {}
+
   async findManyByRepo(repoId: UUID) {
     const files = await this.drizzleService.db.query.files.findMany({
       where: eq(filesTable.repoId, repoId),

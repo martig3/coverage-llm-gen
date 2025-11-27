@@ -9,6 +9,7 @@ import {
 
 import type { Route } from './+types/root';
 import './app.css';
+import { SSEProvider } from './contexts/SSEContext';
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -43,11 +44,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <div
-      className={'container h-dvh w-full p-8 flex items-center justify-center'}
-    >
-      <Outlet />
-    </div>
+    <SSEProvider>
+      <div
+        className={
+          'container h-dvh w-full p-8 flex items-center justify-center'
+        }
+      >
+        <Outlet />
+      </div>
+    </SSEProvider>
   );
 }
 

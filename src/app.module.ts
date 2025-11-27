@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RepoService } from './repo/repo.service';
@@ -12,6 +13,7 @@ import { TasksService } from './tasks/tasks.service';
 import { GenaiService } from './genai/genai.service';
 import { GithubService } from './github/github.service';
 import { FilesController } from './files/files.controller';
+import { EventsController } from './events/events.controller';
 
 @Module({
   imports: [
@@ -19,8 +21,14 @@ import { FilesController } from './files/files.controller';
       isGlobal: true,
     }),
     ScheduleModule.forRoot(),
+    EventEmitterModule.forRoot(),
   ],
-  controllers: [AppController, RepoController, FilesController],
+  controllers: [
+    AppController,
+    RepoController,
+    FilesController,
+    EventsController,
+  ],
   providers: [
     AppService,
     RepoService,
